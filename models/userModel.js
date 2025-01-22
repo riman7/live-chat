@@ -8,7 +8,7 @@ const userSchmea = new mongoose.Schema({
         type:String,
         required: true
     }, 
-    image:{
+    profile:{
         type:String,
         required: true
     }, 
@@ -25,4 +25,4 @@ const userSchmea = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.Model('user', userSchmea)
+module.exports = mongoose.model('user', userSchmea)

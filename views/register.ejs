@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Page</title>
+  <link rel="stylesheet" href="/css/register-style.css">
+</head>
+<body>
+  <div class="container">
+    <form class="registration-form" action="/register" method="POST" enctype="multipart/form-data">
+      <h2>Register</h2>
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="profile">Profile Picture</label>
+        <input type="file" id="profile" name="profile" accept="image/*" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn">Register</button>
+    </form>
+    <!-- <% if(typeof message !== 'undefined'){
+        %>
+        <p style="color: green;"><%= message %></p>
+        <% 
+    }
+    %> -->
+  </div>
+</body>
+</html>
