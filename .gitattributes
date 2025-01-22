@@ -1,0 +1,5 @@
+# Force LF for all text files
+* text=auto eol=lf
+
+# Use CRLF for specific file types
+*.bat eol=crlf
