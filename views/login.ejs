@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/register-style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    
+    <!-- Flash message for errors -->
+    <% if (typeof message !== 'undefined') { %>
+      <p class="error-message"><%= message %></p>
+    <% } %>
+
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          name="email" 
+          id="email" 
+          placeholder="Enter your email" 
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          id="password" 
+          placeholder="Enter your password" 
+          required>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn">Login</button>
+      </div>
+
+      <p>Don't have an account? <a href="/register">Register</a></p>
+    </form>
+  </div>
+</body>
+</html>

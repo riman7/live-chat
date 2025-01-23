@@ -1,8 +1,9 @@
 const express = require('express');
 const http = require('http');
-const dotenv = require('dotenv');
+require('dotenv').config();
 const ioSocket = require('socket.io');
 const mongoose = require('mongoose');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -17,7 +18,7 @@ async function main() {
 }
 main().catch(err => console.log(err));
 
-
+//for res.render
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
