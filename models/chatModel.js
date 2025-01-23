@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 
 const chatSchema =  new mongoose.Schema({
-    senderId: {type: string,
+    senderId: {
+        type: String,
         ref: 'user'
     },
-    reciverId: {type: string,
+    reciverId: {
+        type: String,
         ref: 'user'
     },
-    msg: {type:string, required: true}  
+    msg: {
+        type:String,
+            required: true}  
 },
 {
     timestaps: true

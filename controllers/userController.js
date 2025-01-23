@@ -1,5 +1,6 @@
 const user = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const chatModel = require('../models/chatModel');
 
 const registerLoad = async (req, res) => {
     try {
@@ -85,9 +86,25 @@ const loadDashboard = async (req, res) => {
         console.log(err);
     }
 }
+
+const saveChat = async (req, res)=>{
+    try{
+        var chat = new chatModel({
+            senderId: req.body.senderId,
+            receiverId: req.body.receiverId,
+            msg: req.body.msg
+        })
+        await chat.save();
+        res.status(200).json({message: "Chat saved successfully"})
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 module.exports = {
     register, registerLoad,
     loadLogin, login,
     loadDashboard,
-    logout
+    logout,
+    saveChat
 }

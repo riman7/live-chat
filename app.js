@@ -22,12 +22,18 @@ main().catch(err => console.log(err));
 const uns = io.of('/user-namespace');
 uns.on('connection', async (socket)=>{
     console.log('user connected');
-    console.log(socket);
-    var senderId = socket.handshake.auth.token;
-    await user.findByIdAndUpdate({_id: senderId}, {$set:{is_online: '1'}});
+    var userId = socket.handshake.auth.token;
+
+    //message for all user: broadcast
+    socket.broadcast.emit('user-got-online',{userId:userId});
+
+    await user.findByIdAndUpdate({_id: userId}, {$set:{is_online: '1'}});
     socket.on('disconnect',async ()=>{
         console.log('user disconnected');
-        await user.findByIdAndUpdate({_id: senderId}, {$set:{is_online: '0'}});
+        await user.findByIdAndUpdate({_id: userId}, {$set:{is_online: '0'}});
+
+        //message for all user: broadcast
+        socket.broadcast.emit('user-got-offline',{userId:userId});
     })
 });
 //for res.render

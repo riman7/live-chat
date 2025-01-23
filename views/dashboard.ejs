@@ -59,6 +59,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
             cursor: pointer;
+            position: relative;
         }
 
         .friend:hover {
@@ -70,6 +71,33 @@
             height: 40px;
             border-radius: 50%;
             margin-right: 10px;
+            border: 2px solid #fff;
+        }
+
+        .friend span {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        /* Online and Offline Status */
+        .online-status {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .online-status.online {
+            background-color: #28a745; /* Green for online */
+        }
+
+        .online-status.offline {
+            background-color: #dc3545; /* Red for offline */
         }
 
         .logout-button {
@@ -116,7 +144,7 @@
             border-radius: 5px;
             background-color: #f1f1f1;
             max-width: 70%;
-            word-wrap: break-word; /* Ensure long messages wrap */
+            word-wrap: break-word;
         }
 
         .message.user {
@@ -208,6 +236,8 @@
             }
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 <body>
     <div class="chat-container">
@@ -215,41 +245,44 @@
         <div class="sidebar">
             <h2>Friends</h2>
             <div class="friends-list">
-                <% 
-                    if(otherUsers.length > 0){
-                        for(let i=0; i < otherUsers.length; i++){
-                            %>
-                            <div class="friend">
-                                <img src="/images/<%=otherUsers[i].profile%>" alt="Friend 1">
-                                <span><%=otherUsers[i].name%></span>
-                            </div>
-                            <%
-                        }
-                    }
-                    %>
-                
+                <% if (otherUsers.length > 0) { 
+                    for (let i = 0; i < otherUsers.length; i++) { %>
+                        <div user-id="<%=otherUsers[i]._id %>" class="friend">
+                            <img src="/images/<%= otherUsers[i].profile %>" alt="Friend <%= i + 1 %>">
+                            <span><%= otherUsers[i].name %></span>
+                            <span id="status-<%=otherUsers[i]._id%>" class="online-status <%= otherUsers[i].is_online === '1' ? 'online' : 'offline' %>">
+                                <%= otherUsers[i].is_online === '1' ? 'Online' : 'Offline' %>
+                            </span>
+                        </div>
+                <% } } %>
             </div>
             <a href="/logout" class="logout-button">Logout</a>
         </div>
 
         <!-- Main Chat Area -->
-        
-        
         <div class="chat-main">
             <div class="chat-header">
                 <h2>User: <%= user.name %></h2>
             </div>
             <div class="chat-messages" id="chat-messages">
-                <!-- Messages will be appended here -->
+                <div class="message user">
+                    <div class="message-info">
+                        <img src="${currentUser.profilePic}" alt="${currentUser.name}">
+                        <span>${currentUser.name}</span>
+                    </div>
+                    hi1</div>
+                <div class="message">hi2</div>
             </div>
-            <div class="chat-input">
+
+            <form action="" class="chat-input" id="chat-input-form">
                 <input type="text" id="message-input" placeholder="Type a message...">
-                <button id="send-button">Send</button>
-            </div>
+                <button type="submit" id="send-button">Send</button>
+            </form>
+
         </div>
     </div>
-
-    <script src="/socket.io/socket.io.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
 
     <script>
         var sender_id = '<%=user._id%>';
@@ -258,6 +291,21 @@
                 token: sender_id
             }
         });
+
+        //update user status
+        //online
+        socket.on('user-got-online',(data)=>{
+            $('#status-' + data.userId).text('online');
+            $('#status-' + data.userId).removeClass('offline').addClass('online');
+
+        });
+
+        //offline
+        socket.on('user-got-offline',(data)=>{
+            $('#status-'+data.userId).text('offline');
+            $('#status-' + data.userId).removeClass('online').addClass('offline');
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const chatMessages = document.getElementById('chat-messages');
             const messageInput = document.getElementById('message-input');
@@ -278,49 +326,61 @@
                     sendMessage();
                 }
             });
+            
+            //clicking on friend list
+            $('.friend').click(function(){
+                var reciver_id = $(this).attr('user-id');
 
-            function sendMessage() {
-                const messageText = messageInput.value.trim();
-                if (messageText !== '') {
-                    const messageElement = document.createElement('div');
-                    messageElement.classList.add('message', 'user');
-
-                    // Add user info (profile picture and username)
-                    const messageInfo = document.createElement('div');
-                    messageInfo.classList.add('message-info');
-                    messageInfo.innerHTML = `
-                        <img src="${currentUser.profilePic}" alt="${currentUser.name}">
-                        <span>${currentUser.name}</span>
-                    `;
-
-                    // Add message text
-                    const messageTextElement = document.createElement('div');
-                    messageTextElement.textContent = messageText;
-
-                    // Append to message element
-                    messageElement.appendChild(messageInfo);
-                    messageElement.appendChild(messageTextElement);
-
-                    // Append to chat messages
-                    chatMessages.appendChild(messageElement);
-                    messageInput.value = '';
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
-            }
-
-            // Logout button functionality
-            logoutButton.addEventListener('click', () => {
-                alert('Logged out!');
-                // Add logout logic here (e.g., redirect to login page)
             });
 
-            // Friends list click functionality
-            friendsList.forEach(friend => {
-                friend.addEventListener('click', () => {
-                    alert(`Chat with ${friend.querySelector('span').textContent}`);
-                    // Add logic to switch chat to the selected friend
-                });
-            });
+            $('#chat-input-form').submit(function(event){
+                event.preventDefault();
+                var msg = $('#message-input').val();
+                $.ajax({
+                    url:'/save-chat',
+                    type: "POST",
+                    data: {
+                        senderId:sender_id,
+                        reciverId:reciver_id,
+                        msg:msg 
+                    }
+                })
+
+            })
+
+
+            // function sendMessage() {
+            //     const messageText = messageInput.value.trim();
+            //     if (messageText !== '') {
+            //         const messageElement = document.createElement('div');
+            //         messageElement.classList.add('message', 'user');
+
+            //         // Add user info (profile picture and username)
+            //         const messageInfo = document.createElement('div');
+            //         messageInfo.classList.add('message-info');
+            //         messageInfo.innerHTML = `
+            //             <img src="${currentUser.profilePic}" alt="${currentUser.name}">
+            //             <span>${currentUser.name}</span>
+            //         `;
+
+            //         // Add message text
+            //         const messageTextElement = document.createElement('div');
+            //         messageTextElement.textContent = messageText;
+
+            //         // Append to message element
+            //         messageElement.appendChild(messageInfo);
+            //         messageElement.appendChild(messageTextElement);
+
+            //         // Append to chat messages
+            //         chatMessages.appendChild(messageElement);
+            //         messageInput.value = '';
+            //         chatMessages.scrollTop = chatMessages.scrollHeight;
+            //     }
+            // }
+
+
+
+
 
             // Simulate receiving a message (for demonstration purposes)
             setTimeout(() => {
