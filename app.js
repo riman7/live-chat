@@ -3,7 +3,7 @@ const http = require('http');
 require('dotenv').config();
 const ioSocket = require('socket.io');
 const mongoose = require('mongoose');
-
+const user = require('./models/userModel');
 
 const app = express();
 const server = http.createServer(app);
@@ -18,6 +18,18 @@ async function main() {
 }
 main().catch(err => console.log(err));
 
+//iosocket
+const uns = io.of('/user-namespace');
+uns.on('connection', async (socket)=>{
+    console.log('user connected');
+    console.log(socket);
+    var senderId = socket.handshake.auth.token;
+    await user.findByIdAndUpdate({_id: senderId}, {$set:{is_online: '1'}});
+    socket.on('disconnect',async ()=>{
+        console.log('user disconnected');
+        await user.findByIdAndUpdate({_id: senderId}, {$set:{is_online: '0'}});
+    })
+});
 //for res.render
 app.set('view engine', 'ejs');
 app.set('views', './views');

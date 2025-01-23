@@ -5,7 +5,7 @@ const path = require('path');
 const multer = require('multer');
 
 // Define routes
-//bodyParser
+//bodyParser to user res.body
 user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
 
@@ -14,7 +14,6 @@ user_route.use(express.static('public'));
 
 
 const session = require('express-session');
-console.log(process.env.SESSION_SECRET);
 user_route.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false, // Prevent resaving sessions that are unchanged
@@ -33,21 +32,23 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+const auth = require('../middlewares/auth');
 
 const userController = require('../controllers/userController'); //using module
 
-user_route.get('/register', userController.registerLoad);
+user_route.get('/register',auth.isLogout, userController.registerLoad);
 user_route.post('/register', upload.single('profile'), userController.register);
 
-user_route.get('/', userController.loadLogin);
-user_route.post('/', userController.login);
+user_route.get('/',auth.isLogout, userController.loadLogin);
+user_route.post('/login', userController.login);
 
-user_route.get('/logout', userController.logout);
+user_route.get('/logout', auth.isLogin, userController.logout);
 
-user_route.get('/dashboard', userController.loadDashboard);
+user_route.get('/dashboard',auth.isLogin, userController.loadDashboard);
 
-user_route.all('*', (req, res) => {
-  res.redirect('/');
-})
+
+// user_route.all('*', (req, res) => {
+//   res.redirect('/');
+// })
 
 module.exports = user_route; 
