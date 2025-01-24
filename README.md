@@ -21,6 +21,7 @@ This is a real-time chat application built using **Node.js**, **Express.js**, **
 ### Backend:
 - **Node.js**: Runtime environment for server-side JavaScript.
 - **Express.js**: Framework for backend routing and logic.
+   - Middlewares: body-parser, multer (used for uploading files.), express session, dotenv
 - **Socket.IO**: WebSocket library for real-time data transfer.
 - **EJS**: Templating engine for rendering dynamic HTML pages.
 - **MongoDB** (or your preferred database): Used to store user and chat data.
