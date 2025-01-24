@@ -1,0 +1,2 @@
+     <img src="${user.profile}" alt="${user.name}">
+                                            <span>${user.name}</span>

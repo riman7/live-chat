@@ -46,6 +46,10 @@ user_route.get('/logout', auth.isLogin, userController.logout);
 
 user_route.get('/dashboard',auth.isLogin, userController.loadDashboard);
 
+
+// user_route.post('/savechat', (req,res)=>{
+//   console.log('here');
+// })
 user_route.post('/savechat', userController.saveChat);
 
 

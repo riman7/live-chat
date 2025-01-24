@@ -95,10 +95,18 @@ const saveChat = async (req, res)=>{
             msg: req.body.msg
         })
         await chat.save();
-        res.status(200).json({message: "Chat saved successfully"})
+
+        res.status(200).json({
+            success:true,
+            message: "Chat saved successfully",
+            chat: chat
+        });
     }
     catch (err) {
-        console.log(err);
+        res.status(400).send({
+            success:false,
+            message:"Failed to save chat: " + err.message
+        });
     }
 }
 module.exports = {

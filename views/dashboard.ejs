@@ -4,239 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
-    <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .chat-container {
-            width: 100%;
-            max-width: 800px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            overflow: hidden;
-            height: 90vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 30%;
-            background-color: #007bff;
-            color: #fff;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar h2 {
-            margin-bottom: 20px;
-        }
-
-        .friends-list {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .friend {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .friend:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .friend img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-            border: 2px solid #fff;
-        }
-
-        .friend span {
-            flex: 1;
-            font-weight: bold;
-        }
-
-        /* Online and Offline Status */
-        .online-status {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .online-status.online {
-            background-color: #28a745; /* Green for online */
-        }
-
-        .online-status.offline {
-            background-color: #dc3545; /* Red for offline */
-        }
-
-        .logout-button {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #ff4b5c;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .logout-button:hover {
-            background-color: #ff1c34;
-        }
-
-        /* Main Chat Area */
-        .chat-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #f1f1f1;
-            max-width: 70%;
-            word-wrap: break-word;
-        }
-
-        .message.user {
-            background-color: #007bff;
-            color: #fff;
-            margin-left: auto;
-        }
-
-        .message-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .message-info img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .message-info span {
-            font-weight: bold;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 10px;
-            background-color: #f9f9f9;
-        }
-
-        #message-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        #send-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #send-button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .chat-container {
-                flex-direction: column;
-                height: 100vh;
-                border-radius: 0;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: 30%;
-            }
-
-            .chat-main {
-                width: 100%;
-                height: 70%;
-            }
-
-            .chat-header {
-                padding: 10px;
-            }
-
-            .chat-messages {
-                padding: 10px;
-            }
-
-            .chat-input {
-                padding: 5px;
-            }
-
-            #message-input {
-                padding: 8px;
-            }
-
-            #send-button {
-                padding: 8px 15px;
-            }
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 </head>
 <body>
@@ -265,13 +35,7 @@
                 <h2>User: <%= user.name %></h2>
             </div>
             <div class="chat-messages" id="chat-messages">
-                <div class="message user">
-                    <div class="message-info">
-                        <img src="${currentUser.profilePic}" alt="${currentUser.name}">
-                        <span>${currentUser.name}</span>
-                    </div>
-                    hi1</div>
-                <div class="message">hi2</div>
+                <div class="message">Select User to chat</div>
             </div>
 
             <form action="" class="chat-input" id="chat-input-form">
@@ -284,13 +48,19 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
 
+
     <script>
         var sender_id = '<%=user._id%>';
+        var receiver_id;
         var socket = io('/user-namespace',{
             auth: {
                 token: sender_id
             }
         });
+
+        function chatScoll(){
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        }
 
         //update user status
         //online
@@ -319,94 +89,117 @@
                 profilePic: "https://via.placeholder.com/30"
             };
 
-            // Send message functionality
-            sendButton.addEventListener('click', sendMessage);
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-            
+
             //clicking on friend list
             $('.friend').click(function(){
-                var reciver_id = $(this).attr('user-id');
+                receiver_id = $(this).attr('user-id');
+                socket.emit('select-chat', {
+                    sender_id: sender_id,
+                    receiver_id: receiver_id
+                });
+                socket.on('load-chat',(data)=>{
+                    $('#chat-messages').html('');
+                    chats = data.chats;
+                    for(let i=0; i<chats.length; i++){
+                        if(chats[i].senderId == sender_id){
+                            const html = `
+                                <div class="message user">
+                                    <div class="message-info">
+                                        <img src="/images/<%=user.profile%>" alt="">
+                                        <span>You</span>
+                                    </div>
+                                    ${chats[i].msg}
+                                </div>
+                            `;
+                            $('#chat-messages').append(html);
+                        }
+                        else{
+                            const html = `
+                                <div class="message">
+                                    <div class="message-info">
+                                    </div>
+                                    ${chats[i].msg}
+                                </div>
+                            `;
+                            $('#chat-messages').append(html);
+                        }
 
+                    }
+                    chatScoll();
+                })
             });
 
-            $('#chat-input-form').submit(function(event){
-                event.preventDefault();
-                var msg = $('#message-input').val();
-                $.ajax({
-                    url:'/save-chat',
-                    type: "POST",
-                    data: {
-                        senderId:sender_id,
-                        reciverId:reciver_id,
-                        msg:msg 
+
+            // Send message functionality
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    $('#chat-input-form').submit();
+                }
+            });
+
+            $('#chat-input-form').submit(function (event) {
+                if (receiver_id) {
+                    // Prevent default form submission (prevent refresh)
+                    event.preventDefault();
+
+                    var msg = $('#message-input').val().trim();
+                    if (!msg) {
+                        alert("Message cannot be empty!");
+                        return;
                     }
-                })
 
-            })
-
-
-            // function sendMessage() {
-            //     const messageText = messageInput.value.trim();
-            //     if (messageText !== '') {
-            //         const messageElement = document.createElement('div');
-            //         messageElement.classList.add('message', 'user');
-
-            //         // Add user info (profile picture and username)
-            //         const messageInfo = document.createElement('div');
-            //         messageInfo.classList.add('message-info');
-            //         messageInfo.innerHTML = `
-            //             <img src="${currentUser.profilePic}" alt="${currentUser.name}">
-            //             <span>${currentUser.name}</span>
-            //         `;
-
-            //         // Add message text
-            //         const messageTextElement = document.createElement('div');
-            //         messageTextElement.textContent = messageText;
-
-            //         // Append to message element
-            //         messageElement.appendChild(messageInfo);
-            //         messageElement.appendChild(messageTextElement);
-
-            //         // Append to chat messages
-            //         chatMessages.appendChild(messageElement);
-            //         messageInput.value = '';
-            //         chatMessages.scrollTop = chatMessages.scrollHeight;
-            //     }
-            // }
-
-
-
-
-
-            // Simulate receiving a message (for demonstration purposes)
-            setTimeout(() => {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-
-                // Add friend info (profile picture and username)
-                const messageInfo = document.createElement('div');
-                messageInfo.classList.add('message-info');
-                messageInfo.innerHTML = `
-                    <img src="https://via.placeholder.com/30" alt="Friend 1">
-                    <span>Friend 1</span>
-                `;
-
-                // Add message text
-                const messageTextElement = document.createElement('div');
-                messageTextElement.textContent = 'Hello! How can I help you?';
-
-                // Append to message element
-                messageElement.appendChild(messageInfo);
-                messageElement.appendChild(messageTextElement);
-
-                // Append to chat messages
-                chatMessages.appendChild(messageElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000);
+                    $.ajax({
+                        url: '/savechat',
+                        type: "POST",
+                        data: {
+                            senderId: sender_id,
+                            receiverId: receiver_id,
+                            msg: msg
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                $('#message-input').val(''); // Clear the input field
+                                const chatMsg = response.chat.msg; // Message from the response
+                                const sender = response.chat.sender; // Assuming the sender info is returned in the response
+                                const html = `
+                                    <div class="message user">
+                                        <div class="message-info">
+                                            <img src="/images/<%=user.profile%>" alt="">
+                                            <span>You</span>
+                                        </div>
+                                        ${chatMsg}
+                                    </div>
+                                `;
+                                $('#chat-messages').append(html); // Append message to the correct container
+                                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight); // Scroll to the bottom
+                                socket.emit('new-msg-send', response.chat);
+                            } else {
+                                alert("Failed to send message: " + response.message);
+                            }
+                        }
+                    });
+                    chatScoll();
+                } 
+                else {
+                    alert('Please select a friend to chat with');
+                }
+            });
+            socket.on('recived-msg-fetch', (data)=>{
+                if(sender_id==data.receiverId && receiver_id==data.senderId){
+                    const html = `
+                    <div class="message">
+                        <div class="message-info">
+                            <img src="/images/<%=user.profile%>" alt="">
+                            <span>Friend</span>
+                        </div>
+                        ${data.msg}
+                    </div>
+                    `;
+                    $('#chat-messages').append(html);
+                    chatScoll();
+                }
+            });
         });
     </script>
 </body>
