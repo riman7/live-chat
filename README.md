@@ -39,6 +39,8 @@ Special thanks to:
 - **ChatGPT** for providing frontend code suggestions and guidance.
 - **DeepSeek** for offering additional insights and improvements.
 
+For backend development, I referred to tutorials by the **Programming Experience** YouTube channel, which were instrumental in understanding and implementing the core functionalities of the application.
+
 ---
 
 ## Installation and Setup
