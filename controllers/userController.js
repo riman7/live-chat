@@ -39,6 +39,7 @@ const loadLogin = async (req, res) => {
 }
 const login = async (req, res) => {
     try {
+
         const email = req.body.email;
         const password = req.body.password;
         const userData = await user.findOne({email: email});
