@@ -31,7 +31,7 @@ const register = async (req, res) => {
 
 const loadLogin = async (req, res) => {
     try {
-        res.render('login', { message: "Login Sucessful" });
+        res.render('login', { message: "Please Log-in!" });
     }
     catch (err) {
         console.log(err);
