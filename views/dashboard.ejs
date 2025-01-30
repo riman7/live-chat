@@ -46,12 +46,13 @@
 
         </div>
     </div>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
 
 
     <script>
         var sender_id = '<%=user._id%>';
+    
+
         var receiver_id;
         var socket = io('/user-namespace',{
             auth: {
@@ -85,7 +86,6 @@
                 name: "You",
                 profilePic: '<%=user.profile%>'
             };
-
             //clicking on friend list
             $('.friend').click(function(){
                 receiver_id = $(this).attr('user-id');
@@ -93,9 +93,12 @@
                     sender_id: sender_id,
                     receiver_id: receiver_id
                 });
+        
+
                 socket.on('load-chat',(data)=>{
                     $('#chat-messages').html('');
                     chats = data.chats;
+                    //let otherUser = otherUsers.find(user => user._id.toString() === chat.senderId.toString());
                     for(let i=0; i<chats.length; i++){
                         if(chats[i].senderId == sender_id){
                             const html = `
@@ -113,6 +116,7 @@
                             const html = `
                                 <div class="message">
                                     <div class="message-info">
+                                        <span>friend</span>
                                     </div>
                                     ${chats[i].msg}
                                 </div>
