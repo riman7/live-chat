@@ -1,11 +1,10 @@
-const { connectDB } = require('./db');
 const express = require('express');
 const http = require('http');
 require('dotenv').config();
 const ioSocket = require('socket.io');
 const mongoose = require('mongoose');
 const user = require('./models/userModel');
-const chat = require('./models/chatModel')
+const chat = require('./models/chatModel');
 
 const app = express();
 const server = http.createServer(app);
@@ -20,20 +19,12 @@ app.use('/', userRoute);
 
 async function main() {
     // await mongoose.connect('mongodb://127.0.0.1:27017/live-chat');
-    await mongoose.connect('mongodb+srv://riman7:pn533VfegufFEIdr@livechat.jqsfg.mongodb.net/?retryWrites=true&w=majority&appName=livechat');
+    await mongoose.connect(process.env.URI);
 }
 main().catch(err => console.log(err));
 
-// connectDB()
-//     .then(() => {
-//         app.listen(3000, () => {
-//             console.log("Server is running on http://localhost:3000");
-//         });
-//     })
-//     .catch((err) => {
-//         console.error("Failed to connect to the database", err.message);
-//         process.exit(1); // Exit if the DB connection fails
-//     });
+
+
 
 //iosocket
 const uns = io.of('/user-namespace');
@@ -79,5 +70,5 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 server.listen(PORT, ()=>{
-    console.log('Server is running at 3000');
+    console.log(`Server is running at ${PORT}`);
 });

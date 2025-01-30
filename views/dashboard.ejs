@@ -19,7 +19,7 @@
                 <% if (otherUsers.length > 0) { 
                     for (let i = 0; i < otherUsers.length; i++) { %>
                         <div user-id="<%=otherUsers[i]._id %>" class="friend">
-                            <img src="/images/<%= otherUsers[i].profile %>" alt="Friend <%= i + 1 %>">
+                            <img src="<%= otherUsers[i].profile %>" alt="Friend <%= i + 1 %>">
                             <span><%= otherUsers[i].name %></span>
                             <span id="status-<%=otherUsers[i]._id%>" class="online-status <%= otherUsers[i].is_online === '1' ? 'online' : 'offline' %>">
                                 <%= otherUsers[i].is_online === '1' ? 'Online' : 'Offline' %>
@@ -86,7 +86,6 @@
                 profilePic: "https://via.placeholder.com/30"
             };
 
-
             //clicking on friend list
             $('.friend').click(function(){
                 receiver_id = $(this).attr('user-id');
@@ -102,7 +101,7 @@
                             const html = `
                                 <div class="message user">
                                     <div class="message-info">
-                                        <img src="/images/<%=user.profile%>" alt="">
+                                        <img src="<%=user.profile%>" alt="">
                                         <span>You</span>
                                     </div>
                                     ${chats[i].msg}
@@ -162,7 +161,7 @@
                                 const html = `
                                     <div class="message user">
                                         <div class="message-info">
-                                            <img src="/images/<%=user.profile%>" alt="">
+                                            <img src="<%=user.profile%>" alt="">
                                             <span>You</span>
                                         </div>
                                         ${chatMsg}
@@ -188,7 +187,7 @@
                     const html = `
                     <div class="message">
                         <div class="message-info">
-                            <img src="/images/<%=user.profile%>" alt="">
+                            <img src="<%=user.profile%>" alt="">
                             <span>Friend</span>
                         </div>
                         ${data.msg}

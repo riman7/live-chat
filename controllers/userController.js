@@ -2,6 +2,14 @@ const user = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const chatModel = require('../models/chatModel');
 
+require('dotenv').config();
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const FormData = require('form-data')
+
+const imgbbApiKey = process.env.imgbb_api;
+
 const registerLoad = async (req, res) => {
     try {
         res.render('register')
@@ -11,17 +19,51 @@ const registerLoad = async (req, res) => {
     }
 }
 
+
+
 const register = async (req, res) => {
     try {
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(req.body.password, saltRounds);
+        const filePath = req.file.path;
+        console.log(req.file)
+        //const imagePath = path.join(__dirname, 'public', 'images', 'favicon.png');
+
+        const uploadImage = async () => {
+            try {
+                // Read the image file
+                const image = fs.readFileSync(filePath);
+        
+                // Set up the form data for Imgbb API
+                const formData = new FormData();
+                formData.append('image', image, req.file.filename);
+        
+                // Send POST request to Imgbb
+                const response = await axios.post('https://api.imgbb.com/1/upload?key=' + imgbbApiKey, formData, {
+                    headers: {
+                        ...formData.getHeaders(),
+                    },
+                });
+                // Log the response from Imgbb
+                console.log('Image uploaded successfully:');
+                return response.data.data.url;
+            } catch (error) {
+                console.error('Error uploading image:', error.message);
+            }
+        };
+
+
+        const imgUrl = await uploadImage();
+
         const User = new user({
             name: req.body.name,
             email: req.body.email,
-            profile: req.file.filename,
+            profile: imgUrl,
             password: passwordHash
         });
+
         await User.save();
+
         res.redirect('/')
     }
     catch (err) {
@@ -31,7 +73,7 @@ const register = async (req, res) => {
 
 const loadLogin = async (req, res) => {
     try {
-        res.render('login', { message: "Please Log-in!" });
+        res.render('login', { message: "" });
     }
     catch (err) {
         console.log(err);
@@ -46,7 +88,6 @@ const login = async (req, res) => {
         if(userData){
             if(await bcrypt.compare(password, userData.password)){
                 req.session.user = userData;
-
                 res.redirect('/dashboard');
             }
             else{
